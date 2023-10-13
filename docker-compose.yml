@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        - DEV=true
+    ports:
+      - '8000:8000'
+
+    volumes:
+      - ./core/:/core
+
+    command: >
+      sh -c "while ! nc -z db 5432; do echo 'Waiting for Postgres Databse Startup...' & sleep 1; done;
+             python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+
+    environment:
+      - DB_HOST=db
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASSWORD=unsecure
+
+    depends_on:
+      - db
+
+
+  db:
+    image: postgres:16-alpine3.18
+    volumes:
+      - dev-db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=unsecure
+
+
+volumes:
+    dev-db-data:
