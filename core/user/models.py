@@ -13,8 +13,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True
         )
     name = models.CharField(max_length=255, blank=True, null=True)
+    otp = models.CharField(max_length=6, blank=True, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
-    date_created = models.DateTimeField(auto_now=True)
+    date_updated = models.DateTimeField(auto_now=True)
     is_num_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

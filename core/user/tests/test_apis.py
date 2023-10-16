@@ -8,6 +8,8 @@ CREATE_URL = reverse('user:create')
 OBTAIN_TOKEN_URL = reverse('obtain-token')
 REFRESH_TOKEN_URL = reverse('refresh-token')
 PROFILE_URL = reverse('user:profile')
+CREATE_OTP_URL = reverse('user:create-otp')
+VERIFY_OTP_URL = reverse('user:verify-otp')
 
 
 class PublicApiTests(TestCase):
@@ -124,3 +126,60 @@ class PrivateApiTests(TestCase):
             if k != 'password':
                 self.assertEqual(getattr(user, k), v)
         self.assertTrue(user.check_password(payload['password']))
+
+    def test_create_otp_success(self):
+        '''Test creating and saving otp for user.'''
+        payload = {  # Credentials of the user that we are authenticated as
+            'phone_number': '2222',  # in the SetUp function.
+            'password': 'testpass123'
+        }
+        res = self.client.patch(CREATE_OTP_URL, payload)
+        get_user_model().objects.get(phone_number='2222')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_create_otp_error(self):
+        '''Test Creating OTP error.'''
+        payload = {  # Credentials of the user that we are authenticated as
+            'phone_number': '2222',  # in the SetUp function.
+            'password': 'testpass'  # Bad credentials
+        }
+        res = self.client.patch(CREATE_OTP_URL, payload)
+        get_user_model().objects.get(phone_number='2222')
+
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_verify_otp_success(self):
+        '''Test verifying the OTP code sent to their phone number.'''
+        payload = {  # Credentials of the user that we are authenticated as i
+            'phone_number': '2222',  # n the SetUp function.
+            'password': 'testpass123'
+        }
+        res = self.client.patch(CREATE_OTP_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        user = get_user_model().objects.get(
+            phone_number=payload['phone_number']
+            )
+        payload_verify = {'otp': '12345'}  # Hardcoded otp for test
+        verify_res = self.client.post(VERIFY_OTP_URL, payload_verify)
+        user.refresh_from_db()
+
+        self.assertEqual(verify_res.status_code, status.HTTP_202_ACCEPTED)
+        self.assertEqual(user.otp, None)
+        self.assertTrue(user.is_num_verified)
+
+    def test_verify_otp_error(self):
+        '''Test verifying the OTP code sent to their phone number error.'''
+        payload = {  # Credentials of the user that we are authenticated as
+            'phone_number': '2222',  # in the SetUp function.
+            'password': 'testpass123'
+        }
+        res = self.client.patch(CREATE_OTP_URL, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        payload_verify = {'otp': '15'}  # Wrong OTP code to cause error
+        verify_res = self.client.post(VERIFY_OTP_URL, payload_verify)
+
+        self.assertEqual(verify_res.status_code, status.HTTP_400_BAD_REQUEST)
