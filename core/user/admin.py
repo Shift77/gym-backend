@@ -14,7 +14,7 @@ class UserAdmin(BaseUserADmin):
         ('Permissions',
             {'fields': ('is_coach', 'is_num_verified', 'is_active', 'is_staff',
                         'is_superuser')}),
-        ('Dates', {'fields': ('lat_login', 'date_joined', 'date_updated')})
+        ('Dates', {'fields': ('last_login', 'date_joined', 'date_updated')})
     ]
     add_fieldsets = [
         (None, {
@@ -28,4 +28,4 @@ class UserAdmin(BaseUserADmin):
              }),
     ]
 
-    readonly_fields = ['last_login', 'date_joined', 'date_updated']
+    readonly_fields = ['last_login', 'date_joined', 'date_updated', 'is_num_verified']
