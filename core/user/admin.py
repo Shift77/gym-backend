@@ -28,4 +28,8 @@ class UserAdmin(BaseUserADmin):
              }),
     ]
 
-    readonly_fields = ['last_login', 'date_joined', 'date_updated', 'is_num_verified']
+    readonly_fields = [
+        'last_login',
+        'date_joined',
+        'date_updated',
+        'is_num_verified']

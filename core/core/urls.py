@@ -23,7 +23,6 @@ from rest_framework_simplejwt.views import (
     )
 
 urlpatterns = [
-
     path('admin/', admin.site.urls),
     path('api/schema/',
          SpectacularAPIView.as_view(),
@@ -37,5 +36,8 @@ urlpatterns = [
     path('api/token/refresh/',
          TokenRefreshView.as_view(),
          name='refresh-token'),
+
+    # Apps
     path('api/user/', include('user.urls')),
+    path('api/', include('gym.urls')),
 ]
