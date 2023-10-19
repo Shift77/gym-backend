@@ -30,7 +30,7 @@ urlpatterns = [
     path('api/docs/',
          SpectacularSwaggerView.as_view(url_name='schema'),
          name='docs'),
-    path('api/token/',
+    path('api/token/obtain/',
          TokenObtainPairView.as_view(),
          name='obtain-token'),
     path('api/token/refresh/',
