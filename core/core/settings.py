@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # Apps
     'user',
     'gym',
+    'plan',
 ]
 
 MIDDLEWARE = [
