@@ -71,14 +71,12 @@ class PlanSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         sub_plans_data = validated_data.pop('sub_plans', False)  # A list
-        print(validated_data)
         instance = super().update(instance, validated_data)
 
         existing_sub_plans_id = [e.id for e in instance.sub_plans.all()]
 
         if sub_plans_data:
             for sub_plan_d in sub_plans_data:
-                print(sub_plan_d)
                 exercises_id_list = sub_plan_d.pop('exercises_id_list', False)
 
                 if sub_plan_d.get('id', None) in existing_sub_plans_id:

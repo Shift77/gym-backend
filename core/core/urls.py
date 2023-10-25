@@ -39,6 +39,6 @@ urlpatterns = [
 
     # Apps
     path('api/user/', include('user.urls')),
-    path('api/', include('gym.urls')),
+    path('api/gym/', include('gym.urls')),
     path('api/plan/', include('plan.urls')),
 ]

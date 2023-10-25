@@ -156,7 +156,6 @@ class PrivatePlanApiTests(TestCase):
         # self.normal_client is neither the creator of the instance
         # nor an admin to be able to delete the record.
         res = self.normal_client.delete(url)
-        print(res.data)
 
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         self.assertTrue(Plan.objects.filter(id=plan.id).exists())

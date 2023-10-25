@@ -96,7 +96,6 @@ class PlanViewSet(ModelViewSet):
             )
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         context = {'user': self.request.user}
         serializer = self.get_serializer(data=request.data, context=context)
         serializer.is_valid(raise_exception=True)
