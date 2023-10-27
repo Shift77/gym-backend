@@ -56,7 +56,8 @@ class ModelTests(TestCase):
 
         self.assertEqual(str(exercise), 'Test Exercise')
         self.assertEqual(exercise.description, 'Exercise description!')
-        self.assertTrue(models.Exercise.objects.filter(id=exercise.id).exists())
+        self.assertTrue(models.Exercise.objects
+                        .filter(id=exercise.id).exists())
 
     # def test_create_exercise_set_success(self):
     #     '''Test creating a set'''
@@ -86,7 +87,7 @@ class ModelTests(TestCase):
         e_dict = {}
 
         for i in range(4):
-           e_dict[i] = create_exercise(('Exercise' + str(i+1)))
+            e_dict[i] = create_exercise(('Exercise' + str(i+1)))
 
         sub_plan = models.SubPlan.objects.create(
             plan=plan,

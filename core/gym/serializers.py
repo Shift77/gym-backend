@@ -9,12 +9,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ['id', 'author', 'gym', 'name', 'description']
         read_only_fields = ['id', 'author']
 
-    def create(self, validated_data):
-        user = self.context.get('user')
-        review = models.Review.objects.create(author=user, **validated_data)
-
-        return review
-
 
 class SocialSerializer(serializers.ModelSerializer):
     '''Serializer for Social model.'''

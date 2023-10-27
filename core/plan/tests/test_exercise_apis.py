@@ -8,6 +8,8 @@ from plan import models
 
 
 EXERCISE_LIST = reverse('plan:exercise-list')
+
+
 def create_exercise_detail_url(id):
     return reverse('plan:exercise-detail', args=[id])
 
@@ -40,6 +42,7 @@ class PrivateExerciseApiTests(TestCase):
         )
         self.only_coach_client = APIClient()
         self.only_coach_client.force_authenticate(user=self.only_coach_user)
+
     def test_get_exercise_success(self):
         '''Test creating a plan.'''
         res = self.client.get(EXERCISE_LIST)
@@ -77,7 +80,7 @@ class PrivateExerciseApiTests(TestCase):
             rep_range='8-12',
         )
         url = create_exercise_detail_url(exercise.id)
-        res = self.normal_client.get(url)
+        res = self.client.get(url)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(exercise.created_by, self.user)
@@ -115,6 +118,7 @@ class PrivateExerciseApiTests(TestCase):
         self.assertFalse(
             models.Exercise.objects.filter(name='Test 2').exists()
             )
+
     def test_destroy_exercise_fail(self):
         '''Test deleting an exercise object fail.'''
         exercise = models.Exercise.objects.create(

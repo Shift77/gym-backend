@@ -37,7 +37,6 @@ class GymViewset(viewsets.ModelViewSet):
 class ReviewViewset(viewsets.ModelViewSet):
     '''Viewset for review model.'''
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticated]
     queryset = Review.objects.all()
 
     def get_permissions(self):
@@ -45,18 +44,11 @@ class ReviewViewset(viewsets.ModelViewSet):
             self.permission_classes = [AllowAny]
             return [permission() for permission in self.permission_classes]
 
+        self.permission_classes = [IsAuthenticated]
         return [permission() for permission in self.permission_classes]
 
-    def create(self, request, *args, **kwargs):
-        context = {'user': self.request.user}
-        serializer = self.get_serializer(data=request.data, context=context)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-
-        return Response(serializer.data,
-                        status=status.HTTP_201_CREATED,
-                        headers=headers)
+    def perform_create(self, serializer):
+        return serializer.save(author=self.request.user)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

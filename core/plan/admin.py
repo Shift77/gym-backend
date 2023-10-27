@@ -7,6 +7,7 @@ class ExerciseInline(admin.StackedInline):
     model = models.SubPlan.exercises.through
     extra = 1
 
+
 class SubPlanInline(admin.StackedInline):
     '''Inline SubPlan model.'''
     model = models.SubPlan
@@ -23,7 +24,6 @@ class PlanAdmin(admin.ModelAdmin):
 class SubPlanAdmin(admin.ModelAdmin):
     '''Plan model admin.'''
     inlines = [ExerciseInline]
-
 
 
 admin.site.register(models.Exercise)

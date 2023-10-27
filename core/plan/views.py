@@ -6,18 +6,22 @@ from . import permissions
 from . import models
 from .serializers import ExerciseSerializer, PlanSerializer
 
+
 class ExerciseViewSet(ModelViewSet):
     '''ViewSet for Exercise model.'''
     serializer_class = ExerciseSerializer
-    queryset =  models.Exercise.objects.all()
+    queryset = models.Exercise.objects.all()
 
     def get_permissions(self):
         if self.action == 'list' or self.action == 'retrieve':
-            self.permission_classes = [IsAuthenticated]
+            self.permission_classes = [IsAuthenticated,
+                                       permissions.IsCoachUser]
             return [permission() for permission in self.permission_classes]
 
         elif self.action == 'destroy':
-            self.permission_classes = [IsAuthenticated, IsAdminUser, permissions.IsCoachUser]
+            self.permission_classes = [IsAuthenticated,
+                                       IsAdminUser,
+                                       permissions.IsCoachUser]
             return [permission() for permission in self.permission_classes]
 
         self.permission_classes = [IsAuthenticated, permissions.IsCoachUser]
@@ -32,7 +36,7 @@ class ExerciseViewSet(ModelViewSet):
             self.perform_destroy(instance)
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
     def update(self, request, *args, **kwargs):
         obj = self.get_object()
@@ -62,20 +66,20 @@ class PlanViewSet(ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'list' or self.action == 'retrieve':
-            self.permission_classes = [IsAuthenticated, permissions.IsCoachUser]
+            self.permission_classes = [IsAuthenticated,
+                                       permissions.IsCoachUser]
             return [permission() for permission in self.permission_classes]
 
         elif self.action == 'destroy':
-            self.permission_classes = [IsAuthenticated, IsAdminUser, permissions.IsCoachUser]
+            self.permission_classes = [IsAuthenticated,
+                                       permissions.IsCoachUser]
             return [permission() for permission in self.permission_classes]
 
         self.permission_classes = [IsAuthenticated, permissions.IsCoachUser]
         return [permission() for permission in self.permission_classes]
 
     def list(self, request, *args, **kwargs):
-        # queryset = self.filter_queryset(self.get_queryset())
         queryset = models.Plan.objects.filter(coach=request.user)
-
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)

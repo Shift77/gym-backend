@@ -173,6 +173,13 @@ class PrivateApiTests(TestCase):
 
     def test_get_all_reviews_success(self):
         '''Test getting all reviews.'''
+        gym = create_gym(self.user)
+        models.Review.objects.create(
+            author=self.user,
+            gym=gym,
+            name='review',
+            description='Test description'
+        )
         res = self.client.get(REVIEW_URL)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -232,7 +239,6 @@ class PrivateApiTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertNotEqual(review.name, payload['name'])
-
 
     def test_delete_review_success(self):
         '''Test deleting a review only by its author.'''

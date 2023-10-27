@@ -7,8 +7,11 @@ from rest_framework import status
 from plan.models import Plan, SubPlan, Exercise
 
 PLAN_LIST = reverse('plan:plan-list')
+
+
 def create_plan_detail_url(id):
     return reverse('plan:plan-detail', args=[id])
+
 
 def create_exercise(created_by):
     '''Create exercise objects.'''
@@ -22,6 +25,7 @@ def create_exercise(created_by):
         description="test description."
     )
     return exercise
+
 
 class PrivatePlanApiTests(TestCase):
     '''Test for Plan endpoints that require authentication.'''
@@ -61,7 +65,7 @@ class PrivatePlanApiTests(TestCase):
             gender='no difference',
             description='Test description'
         )
-        sub_plan =SubPlan.objects.create(
+        sub_plan = SubPlan.objects.create(
             plan=plan,
             name='Sub Plan',
             week_number=1,
@@ -84,7 +88,7 @@ class PrivatePlanApiTests(TestCase):
 
     def test_list_plan_fail(self):
         '''Test for listing plans fail.'''
-        plan = Plan.objects.create(
+        Plan.objects.create(
             coach=self.only_coach_user,
             target_user=self.normal_user,
             name='test name',
@@ -94,7 +98,6 @@ class PrivatePlanApiTests(TestCase):
         res = self.normal_client.get(PLAN_LIST)
 
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
-
 
     def test_retrieve_plan_success(self):
         '''Test retrieving a plan successfully.'''
@@ -137,14 +140,12 @@ class PrivatePlanApiTests(TestCase):
         )
         url = create_plan_detail_url(plan.id)
         res = self.only_coach_client.delete(url)  # THe creator of instance.
-        res_2 = self.client.delete(url)  # User with is_staff True.
 
-        self.assertEqual(res_2.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Plan.objects.filter(id=plan.id).exists())
 
-    def test_delete_plan_success(self):
-        '''Test deleting a plan successfully.'''
+    def test_delete_plan_fail(self):
+        '''Test deleting a plan fail.'''
         plan = Plan.objects.create(
             coach=self.only_coach_user,
             target_user=self.normal_user,
