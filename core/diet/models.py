@@ -9,18 +9,24 @@ class Diet(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='created_diets',
-        validators=[custom_coach_validator]
+        validators=[custom_coach_validator],
+        verbose_name='مربی'
     )
     target_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
+        verbose_name='شاگرد'
     )
-    name = models.CharField(max_length=255)
-    purpose = models.CharField(max_length=255, blank=True, null=True)
-    level = models.CharField(max_length=255, blank=True, null=True)
-    description = models.TextField()
+    name = models.CharField(max_length=255, verbose_name='نام')
+    purpose = models.CharField(max_length=255, blank=True, null=True, verbose_name='هدف')
+    level = models.CharField(max_length=255, blank=True, null=True, verbose_name='سطح')
+    description = models.TextField(verbose_name='توضیحات')
+
+    class Meta:
+        verbose_name = 'برنامه غذایی'
+        verbose_name_plural = 'برنامه های غذایی'
 
     def __str__(self):
         return self.name
@@ -50,18 +56,23 @@ class Routine(models.Model):
     diet = models.ForeignKey(
         Diet,
         on_delete=models.CASCADE,
-        related_name='routine'
+        related_name='routine',
+        verbose_name='برنامه غذایی'
         )
-    name = models.CharField(max_length=255)
-    week_number = models.IntegerField()
-    day_number = models.IntegerField()
-    description = models.TextField()
-    breakfast = models.CharField(max_length=500)
-    snack_1 = models.CharField(max_length=500)
-    lunch = models.CharField(max_length=500)
-    snack_2 = models.CharField(max_length=500)
-    dinner = models.CharField(max_length=500)
-    snack_3 = models.CharField(max_length=500)
+    name = models.CharField(max_length=255, verbose_name='نام')
+    week_number = models.IntegerField(verbose_name='هفته')
+    day_number = models.IntegerField(verbose_name='روز')
+    description = models.TextField(verbose_name='توضیحات')
+    breakfast = models.CharField(max_length=500, verbose_name='صبحانه')
+    snack_1 = models.CharField(max_length=500, verbose_name='میان وعده اول')
+    lunch = models.CharField(max_length=500, verbose_name='ناهار')
+    snack_2 = models.CharField(max_length=500, verbose_name='میان وعده دوم')
+    dinner = models.CharField(max_length=500, verbose_name='شام')
+    snack_3 = models.CharField(max_length=500, verbose_name='میان وعده سوم')
+
+    class Meta:
+        verbose_name = 'روتین غذایی'
+        verbose_name_plural = 'روتین های غذایی'
 
     def __str__(self):
         return f'{str(self.name)} : day {str(self.day_number)}'
