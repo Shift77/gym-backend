@@ -17,6 +17,7 @@ class Plan(models.Model):
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
+        related_name='workout_plans',
         verbose_name='شاگرد'
         )
     name = models.CharField(max_length=255, verbose_name='نام')

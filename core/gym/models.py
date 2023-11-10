@@ -12,6 +12,7 @@ class Gym(models.Model):
         on_delete=models.CASCADE,
         verbose_name='مالک'
         )
+    monthly_tuition_toman = models.IntegerField(blank=True, null=True, verbose_name='شهریه ماهانه (تومان)')
     days_closed = models.CharField(max_length=255, verbose_name='روزهای تعطیل')
     hour_open = models.TimeField(verbose_name='ساعت شروع')
     hour_close = models.TimeField(verbose_name='ساعت بستن')

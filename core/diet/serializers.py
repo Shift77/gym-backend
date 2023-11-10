@@ -33,7 +33,7 @@ class RoutineSerializer(serializers.ModelSerializer):
 
 class DietSerializer(serializers.ModelSerializer):
     '''Serializer for Diet model.'''
-    routine = RoutineSerializer(many=True)
+    routines = RoutineSerializer(many=True)
 
     class Meta:
         model = Diet
@@ -45,7 +45,7 @@ class DietSerializer(serializers.ModelSerializer):
             'level',
             'purpose',
             'description',
-            'routine'
+            'routines'
         ]
         read_only_fields = ['id', 'coach']
 

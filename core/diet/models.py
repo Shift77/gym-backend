@@ -17,6 +17,7 @@ class Diet(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
+        related_name='diet_plans',
         verbose_name='شاگرد'
     )
     name = models.CharField(max_length=255, verbose_name='نام')
@@ -56,7 +57,7 @@ class Routine(models.Model):
     diet = models.ForeignKey(
         Diet,
         on_delete=models.CASCADE,
-        related_name='routine',
+        related_name='routines',
         verbose_name='برنامه غذایی'
         )
     name = models.CharField(max_length=255, verbose_name='نام')

@@ -1,13 +1,25 @@
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
+from plan.serializers import PlanSerializer
+from diet.serializers import DietSerializer
 from . import utils
 
 
 class UserSerializer(serializers.ModelSerializer):
     '''Serializer for creating user.'''
+    workout_plans = PlanSerializer(many=True, read_only=True)
+    diet_plans = DietSerializer(many=True, read_only=True)
+
     class Meta:
         model = get_user_model()
-        fields = ['phone_number', 'password', 'name', 'national_id']
+        fields = [
+            'phone_number',
+            'password',
+            'name',
+            'national_id',
+            'workout_plans',
+            'diet_plans',
+            ]
         extra_kwargs = {
             'password': {'write_only': True}
         }
