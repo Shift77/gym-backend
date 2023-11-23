@@ -15,7 +15,7 @@ ARG DEV=false
 RUN python -m venv /.venv && \
     /.venv/bin/pip install --upgrade pip && \
     apk add --upgrade --no-cache postgresql-client && \
-    apk add --upgrade --nocache --virtual .tmp-build-deps \
+    apk add --upgrade --no-cache --virtual .tmp-build-deps \
         build-base postgresql-dev musl-dev && \
     /.venv/bin/pip install -r /tmp/requirements.txt && \
     if [ $DEV = "true" ]; \
