@@ -60,7 +60,7 @@ class DietViewSet(ModelViewSet):
         obj = self.get_object()
         if obj.coach == request.user or request.user.is_staff:
             return super().destroy(request, *args, **kwargs)
-
+        
         return Response(
             'You do not have permission to perform such an action.',
             status=status.HTTP_403_FORBIDDEN,
